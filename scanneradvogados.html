@@ -1,1 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Índice VIDA de Estrutura Patrimonial para Advogados — Ivan Vianna CFP®</title>
+<style>
+:root {
+  --azul:   #1a2e4a;
+  --azul2:  #243f65;
+  --ouro:   #d7ae4d;
+  --ouro2:  #f8e38c;
+  --branco: #ffffff;
+  --fundo:  #f7f6f2;
+  --borda:  #e2ddd5;
+  --texto:  #1a1a1a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Georgia', serif; background: var(--fundo); color: var(--texto); min-height: 100vh; }
 
+.header { background: var(--azul); padding: 2.5rem 1.5rem 2.2rem; text-align: center; position: relative; overflow: hidden; }
+.header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
+.header-eyebrow { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2.5px; color: var(--ouro); text-transform: uppercase; margin-bottom: 1rem; }
+.header-title { font-size: clamp(1.6rem, 4.5vw, 2.4rem); font-weight: 400; color: var(--branco); line-height: 1.2; margin-bottom: 0.75rem; }
+.header-title strong { color: var(--ouro2); font-weight: 700; font-style: italic; }
+.header-sub { font-size: 1rem; color: var(--branco); font-style: italic; line-height: 1.6; max-width: 540px; margin: 0 auto; }
+
+.progress-bar { max-width: 680px; margin: 1.75rem auto 0; padding: 0 1.25rem; }
+.progress-track { height: 3px; background: var(--borda); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--azul2), var(--ouro)); border-radius: 2px; transition: width 0.5s ease; width: 0%; }
+.progress-label { font-size: 1rem; color: var(--texto); font-family: 'Courier New', monospace; margin-top: 6px; }
+
+.questions-wrap { max-width: 680px; margin: 1.5rem auto 0; padding: 0 1.25rem 2rem; }
+
+.risco-header { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; color: var(--azul2); border-bottom: 1px solid var(--borda); padding-bottom: 6px; margin: 2rem 0 1rem; }
+.risco-header:first-child { margin-top: 0; }
+
+.question-block { background: var(--branco); border: 1px solid var(--borda); border-radius: 4px; padding: 1.5rem; margin-bottom: 1rem; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+.question-block.visible { opacity: 1; transform: translateY(0); }
+.question-block.answered { border-left: 3px solid var(--azul); }
+
+.q-numero { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; color: var(--ouro); text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+.q-numero::after { content: ''; flex: 1; height: 1px; background: var(--borda); }
+.q-texto { font-size: 1.05rem; line-height: 1.6; color: var(--texto); margin-bottom: 1.25rem; }
+.q-texto em { font-style: normal; color: var(--azul); font-weight: 600; }
+
+.opcoes { display: flex; flex-direction: column; gap: 8px; }
+.opcao { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border: 1px solid var(--borda); border-radius: 3px; cursor: pointer; transition: all 0.15s; background: var(--fundo); font-size: 1rem; line-height: 1.5; color: var(--texto); text-align: left; width: 100%; font-family: 'Georgia', serif; }
+.opcao:hover { border-color: var(--azul); background: #eef0f5; }
+.opcao.selecionada { background: var(--azul); color: var(--branco); border-color: var(--azul); }
+.opcao-letra { font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; color: var(--ouro); min-width: 16px; flex-shrink: 0; }
+.opcao.selecionada .opcao-letra { color: var(--ouro2); }
+
+.btn-wrap { text-align: center; margin: 2rem 0 1rem; }
+.btn-ver { background: var(--azul); color: var(--ouro2); border: none; padding: 14px 40px; font-size: 1rem; font-family: 'Courier New', monospace; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 2px; }
+.btn-ver:disabled { opacity: 0.3; cursor: not-allowed; }
+.btn-note { font-size: 1rem; color: var(--texto); margin-top: 8px; font-style: italic; }
+
+.gate-wrap { display: none; max-width: 480px; margin: 0 auto; background: var(--azul); border: 2px solid var(--ouro); border-radius: 6px; padding: 2rem; }
+.gate-titulo { font-size: 1rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ouro2); margin-bottom: 1.5rem; }
+.gate-label { display: block; font-size: 1rem; font-weight: 700; color: var(--branco); margin-bottom: 6px; }
+.gate-input { width: 100%; border: 1.5px solid var(--ouro); border-radius: 4px; padding: 12px 14px; background: var(--branco); color: var(--texto); font-size: 1rem; font-family: 'Georgia', serif; outline: none; margin-bottom: 14px; }
+.gate-erro { display: none; font-size: 1rem; color: var(--ouro2); font-weight: 600; margin-bottom: 10px; }
+.gate-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--ouro2), var(--ouro), var(--ouro2)); color: var(--azul); border: none; border-radius: 4px; font-size: 1rem; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 1px; cursor: pointer; }
+
+.resultado { display: none; max-width: 680px; margin: 0 auto; padding: 0 1.25rem 3rem; }
+.resultado.visivel { display: block; }
+
+.res-header { background: var(--azul); border-radius: 4px 4px 0 0; padding: 2.25rem 1.75rem; position: relative; overflow: hidden; }
+.res-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
+.res-eyebrow { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; color: var(--ouro); text-transform: uppercase; margin-bottom: 0.5rem; }
+.res-indice { font-family: 'Courier New', monospace; font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; color: var(--ouro2); line-height: 1; margin-bottom: 0.25rem; }
+.res-frase { font-size: clamp(1.1rem, 3vw, 1.4rem); color: var(--branco); font-style: italic; line-height: 1.35; margin-bottom: 1.25rem; max-width: 500px; }
+.res-barra { height: 5px; background: rgba(255,255,255,0.30); border-radius: 3px; overflow: hidden; }
+.res-barra-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--ouro), var(--ouro2)); transition: width 1s ease 0.3s; width: 0%; }
+
+.res-body { background: var(--branco); border: 1px solid var(--borda); border-top: none; border-radius: 0 0 4px 4px; padding: 1.75rem; }
+.res-section { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); border-bottom: 1px solid var(--borda); padding-bottom: 6px; margin-bottom: 1rem; }
+.res-vulns { list-style: none; margin-bottom: 1.5rem; }
+.res-vulns li { padding: 10px 0 10px 20px; border-bottom: 1px solid var(--borda); font-size: 1rem; line-height: 1.6; color: var(--texto); position: relative; }
+.res-vulns li:last-child { border-bottom: none; }
+.res-vulns li::before { content: '—'; position: absolute; left: 0; color: var(--ouro); font-weight: 700; }
+
+.cta-box { background: var(--azul); border-radius: 3px; padding: 1.75rem; margin-top: 1.5rem; position: relative; overflow: hidden; }
+.cta-box::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
+.cta-kicker { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; color: var(--ouro); text-transform: uppercase; margin-bottom: 0.75rem; }
+.cta-titulo { font-size: 1.1rem; color: var(--branco); line-height: 1.45; margin-bottom: 1rem; }
+.cta-items { list-style: none; margin-bottom: 1.25rem; }
+.cta-items li { font-size: 1rem; color: var(--branco); line-height: 1.55; padding: 5px 0 5px 20px; position: relative; }
+.cta-items li::before { content: '✓'; position: absolute; left: 0; color: var(--ouro2); font-weight: 700; }
+.cta-btn { display: inline-block; background: linear-gradient(135deg, var(--ouro2), var(--ouro), var(--ouro2)); color: var(--azul); font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 13px 28px; border-radius: 2px; text-decoration: none; }
+
+.assinatura { max-width: 680px; margin: 0 auto; padding: 1.5rem 1.25rem 2rem; text-align: center; border-top: 1px solid var(--borda); }
+.assinatura p { font-size: 1rem; color: var(--texto); line-height: 1.6; font-style: italic; }
+.assinatura a { color: var(--azul); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Método VIDA · Ivan Vianna CFP® · Gratuito</div>
+  <h1 class="header-title">Você protege o patrimônio dos clientes.<br><strong>E o seu próprio?</strong></h1>
+  <p class="header-sub">Os riscos patrimoniais que advogados identificam nos clientes — mas ignoram em si mesmos.</p>
+</div>
+
+<div class="progress-bar" id="progressWrap">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 de 6 respondidas</div>
+</div>
+
+<div class="questions-wrap" id="questionsWrap">
+
+  <div class="risco-header">Risco 1 — Patrimônio pessoal</div>
+
+  <div class="question-block" data-q="1">
+    <div class="q-numero">01</div>
+    <p class="q-texto">Se você recebesse hoje uma ação de <em>R$ 5 milhões contra seu escritório</em>, quanto do seu patrimônio pessoal estaria protegido?</p>
+    <div class="opcoes">
+      <button class="opcao" data-valor="0" onclick="sel(this,1)"><span class="opcao-letra">A</span>Não faço ideia. Nunca contratei uma análise formal para saber.</button>
+      <button class="opcao" data-valor="1" onclick="sel(this,1)"><span class="opcao-letra">B</span>Acredito que parte estaria protegida, mas nunca validei isso tecnicamente.</button>
+      <button class="opcao" data-valor="2" onclick="sel(this,1)"><span class="opcao-letra">C</span>Já validei isso formalmente e sei exatamente qual patrimônio estaria protegido.</button>
+    </div>
+  </div>
+
+  <div class="question-block" data-q="2">
+    <div class="q-numero">02</div>
+    <p class="q-texto">Se você ficasse <em>60 dias sem trabalhar</em> por doença ou acidente, seu padrão de vida estaria garantido por quanto tempo?</p>
+    <div class="opcoes">
+      <button class="opcao" data-valor="0" onclick="sel(this,2)"><span class="opcao-letra">A</span>Nunca me fiz essa pergunta de forma concreta — não sei responder com segurança.</button>
+      <button class="opcao" data-valor="1" onclick="sel(this,2)"><span class="opcao-letra">B</span>Tenho alguma reserva, mas sei que não seria suficiente por muito tempo.</button>
+      <button class="opcao" data-valor="2" onclick="sel(this,2)"><span class="opcao-letra">C</span>Sim — tenho reserva estruturada que manteria meu padrão por mais de 6 meses.</button>
+    </div>
+  </div>
+
+  <div class="risco-header">Risco 2 — Escritório</div>
+
+  <div class="question-block" data-q="3">
+    <div class="q-numero">03</div>
+    <p class="q-texto">Se amanhã você tivesse um problema financeiro pessoal grave, <em>suas cotas no escritório poderiam ser afetadas?</em></p>
+    <div class="opcoes">
+      <button class="opcao" data-valor="0" onclick="sel(this,3)"><span class="opcao-letra">A</span>Nunca analisei isso — não sei se minhas cotas estariam protegidas nesse cenário.</button>
+      <button class="opcao" data-valor="1" onclick="sel(this,3)"><span class="opcao-letra">B</span>Acredito que sim, mas nunca fiz uma análise formal para confirmar.</button>
+      <button class="opcao" data-valor="2" onclick="sel(this,3)"><span class="opcao-letra">C</span>Sei exatamente quais mecanismos protegem minhas cotas e já validei isso formalmente.</button>
+    </div>
+  </div>
+
+  <div class="question-block" data-q="4">
+    <div class="q-numero">04</div>
+    <p class="q-texto">A remuneração que você retira do escritório foi estruturada para <em>pagar menos imposto legalmente?</em></p>
+    <div class="opcoes">
+      <button class="opcao" data-valor="0" onclick="sel(this,4)"><span class="opcao-letra">A</span>Nunca fizemos uma análise técnica disso — retiramos conforme o caixa permite.</button>
+      <button class="opcao" data-valor="1" onclick="sel(this,4)"><span class="opcao-letra">B</span>Temos alguma estrutura, mas não sei se é a mais eficiente — nunca foi revisada.</button>
+      <button class="opcao" data-valor="2" onclick="sel(this,4)"><span class="opcao-letra">C</span>Sim — já foi analisada formalmente e está calibrada para eficiência fiscal.</button>
+    </div>
+  </div>
+
+  <div class="risco-header">Risco 3 — Sócios</div>
+
+  <div class="question-block" data-q="5">
+    <div class="q-numero">05</div>
+    <p class="q-texto">Se um sócio quisesse sair amanhã — ou falecesse — <em>você saberia exatamente o que acontece com o escritório?</em></p>
+    <div class="opcoes">
+      <button class="opcao" data-valor="0" onclick="sel(this,5)"><span class="opcao-letra">A</span>Nunca formalizamos isso — operamos na confiança mútua e no contrato social básico.</button>
+      <button class="opcao" data-valor="1" onclick="sel(this,5)"><span class="opcao-letra">B</span>Temos contrato social, mas sem protocolo específico para saída, conflito ou falecimento.</button>
+      <button class="opcao" data-valor="2" onclick="sel(this,5)"><span class="opcao-letra">C</span>Sim — acordo completo, revisado, cobrindo saída, avaliação de cotas e sucessão.</button>
+    </div>
+  </div>
+
+  <div class="risco-header">Risco 4 — Família</div>
+
+  <div class="question-block" data-q="6">
+    <div class="q-numero">06</div>
+    <p class="q-texto">Se você fosse incapacitado permanentemente amanhã, <em>sua família saberia o que fazer com seu patrimônio e suas cotas?</em></p>
+    <div class="opcoes">
+      <button class="opcao" data-valor="0" onclick="sel(this,6)"><span class="opcao-letra">A</span>Nunca organizei isso formalmente — seria um caos para quem precisasse agir.</button>
+      <button class="opcao" data-valor="1" onclick="sel(this,6)"><span class="opcao-letra">B</span>Falei sobre isso informalmente, mas nunca documentei de forma estruturada.</button>
+      <button class="opcao" data-valor="2" onclick="sel(this,6)"><span class="opcao-letra">C</span>Sim — testamento feito, beneficiários definidos e instruções documentadas para a família.</button>
+    </div>
+  </div>
+
+  <!-- GATE -->
+  <div class="btn-wrap">
+    <div class="gate-wrap" id="gate-captura">
+      <div class="gate-titulo">Para ver seu Índice VIDA</div>
+      <label class="gate-label" for="gate-nome">Nome</label>
+      <input class="gate-input" id="gate-nome" type="text" placeholder="Seu nome" autocomplete="name">
+      <label class="gate-label" for="gate-wpp">WhatsApp <span style="color:var(--ouro2);">*</span></label>
+      <input class="gate-input" id="gate-wpp" type="tel" placeholder="(11) 99999-9999" autocomplete="tel">
+      <div class="gate-erro" id="gate-erro">Informe seu WhatsApp para continuar.</div>
+      <button class="gate-btn" onclick="confirmarGate()">Ver meu Índice VIDA →</button>
+    </div>
+    <button class="btn-ver" id="btnVer" onclick="abrirGate()" disabled>Ver meu Índice VIDA →</button>
+    <p class="btn-note" id="btnNote">Responda todas as perguntas para liberar o resultado.</p>
+  </div>
+
+</div>
+
+<!-- RESULTADO -->
+<div class="resultado" id="resultado">
+  <div class="res-header">
+    <div class="res-eyebrow">Índice VIDA de Estrutura Patrimonial · Advogados</div>
+    <div class="res-indice" id="resIndice">—</div>
+    <div class="res-frase" id="resFrase"></div>
+    <div class="res-barra"><div class="res-barra-fill" id="resBarraFill"></div></div>
+  </div>
+  <div class="res-body">
+    <div class="res-section">O que pode destruir valor no seu patrimônio</div>
+    <ul class="res-vulns" id="resVulns"></ul>
+    <div class="cta-box">
+      <div class="cta-kicker">Próximo passo</div>
+      <div class="cta-titulo" id="ctaTitulo"></div>
+      <ul class="cta-items">
+        <li>Onde estão as vulnerabilidades exatas</li>
+        <li>Quanto cada uma pode custar</li>
+        <li>Qual a prioridade de correção</li>
+        <li>Qual o plano de ação</li>
+      </ul>
+      <a class="cta-btn" href="https://ivanlvianna.github.io/scanneradvogados/diagnostico-advogados.html" target="_blank">Ver o que precisa ser corrigido →</a>
+    </div>
+  </div>
+</div>
+
+<div class="assinatura">
+  <p>Ivan Vianna · CFP® · Planejador financeiro · Arquiteto de patrimônio<br>
+  CNPJ 56.099.913/0001-61 · <a href="https://ivanviannafinancas.com.br">ivanviannafinancas.com.br</a> · <a href="https://www.linkedin.com/in/ivanlvianna/">linkedin.com/in/ivanlvianna</a></p>
+</div>
+
+<script>
+const respostas = {};
+const TOTAL_Q = 6;
+
+function sel(btn, q) {
+  document.querySelectorAll(`.question-block[data-q="${q}"] .opcao`).forEach(b => b.classList.remove('selecionada'));
+  btn.classList.add('selecionada');
+  respostas[q] = parseInt(btn.dataset.valor);
+  document.querySelector(`.question-block[data-q="${q}"]`).classList.add('answered');
+  const respondidas = Object.keys(respostas).length;
+  document.getElementById('progressFill').style.width = Math.round((respondidas / TOTAL_Q) * 100) + '%';
+  document.getElementById('progressLabel').textContent = respondidas + ' de 6 respondidas';
+  if (respondidas === TOTAL_Q) document.getElementById('btnVer').disabled = false;
+}
+
+function abrirGate() {
+  document.getElementById('btnVer').style.display = 'none';
+  document.getElementById('btnNote').style.display = 'none';
+  document.getElementById('gate-captura').style.display = 'block';
+}
+
+function confirmarGate() {
+  const nome = (document.getElementById('gate-nome').value || '').trim();
+  const wpp  = (document.getElementById('gate-wpp').value || '').replace(/\D/g,'');
+  if (wpp.length < 10) { document.getElementById('gate-erro').style.display = 'block'; return; }
+  document.getElementById('gate-erro').style.display = 'none';
+  window._leadAdv = { nome, whatsapp: wpp };
+  mostrarResultado();
+}
+
+function mostrarResultado() {
+  const total = Object.values(respostas).reduce((a,b) => a+b, 0);
+  const indice = Math.round((total / 12) * 100);
+  let frase, vulns, ctaTitulo;
+
+  if (indice >= 75) {
+    frase = 'Você construiu patrimônio. Agora precisa garantir sua continuidade.';
+    vulns = [
+      'Acordos societários precisam de revisão periódica — o que protegia 2 sócios pode não funcionar com o crescimento do escritório.',
+      'A legislação de ITCMD está mudando em vários estados — o planejamento sucessório precisa acompanhar.',
+      'Mesmo com estrutura sólida, há oportunidades de eficiência fiscal que só aparecem em análise técnica atualizada.'
+    ];
+    ctaTitulo = 'Seu Índice VIDA identificou vulnerabilidades residuais. O Diagnóstico VIDA mapeia exatamente onde estão e como fechar cada uma.';
+  } else if (indice >= 45) {
+    frase = 'Cada ano sem estrutura aumenta o custo da correção.';
+    vulns = [
+      'Sem acordo de sócios completo, um conflito ou falecimento pode virar disputa que destrói o que levou anos para construir.',
+      'A mistura PF/PJ sem blindagem expõe seu patrimônio pessoal ao risco profissional do escritório.',
+      'Sem acumulação fora do escritório, sua independência financeira depende de você continuar trabalhando — não de você escolher parar.'
+    ];
+    ctaTitulo = 'Seu Índice VIDA encontrou gaps em múltiplas frentes. O Diagnóstico VIDA define a ordem exata de correção — com prioridade e prazo.';
+  } else if (indice >= 20) {
+    frase = 'Seu escritório vale mais do que sua estrutura patrimonial.';
+    vulns = [
+      'Seu patrimônio pessoal está exposto ao risco do escritório — um processo pode atingir o que levou anos para construir.',
+      'Sem acordo de sócios, um conflito ou falecimento pode forçar a dissolução do escritório nas piores condições.',
+      'A remuneração não estruturada representa imposto desnecessário todo mês — esse custo é invisível sem análise.'
+    ];
+    ctaTitulo = 'Seu Índice VIDA identificou vulnerabilidades críticas. O Diagnóstico VIDA define o que corrigir primeiro e como — em sequência, prazo e prioridade.';
+  } else {
+    frase = 'Seu patrimônio depende de você continuar trabalhando.';
+    vulns = [
+      'Sem separação formal, você e o escritório são o mesmo risco — uma condenação pode atingir tudo que construiu como pessoa física.',
+      'Sem acordo de sócios e sem testamento, você está deixando que a lei decida o que você mesmo sabe decidir melhor.',
+      'Sem estrutura fiscal, você provavelmente paga mais imposto do que deveria todo mês — enquanto os instrumentos para mudar isso existem e são legais.'
+    ];
+    ctaTitulo = 'Seu Índice VIDA revelou exposição em todos os quatro riscos. O Diagnóstico VIDA é o próximo passo — identifica exatamente o que corrigir primeiro.';
+  }
+
+  document.getElementById('resIndice').textContent = indice + '/100';
+  document.getElementById('resFrase').textContent = frase;
+  document.getElementById('ctaTitulo').textContent = ctaTitulo;
+  document.getElementById('resVulns').innerHTML = vulns.map(v => `<li>${v}</li>`).join('');
+  setTimeout(() => { document.getElementById('resBarraFill').style.width = indice + '%'; }, 200);
+
+  document.getElementById('questionsWrap').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  const res = document.getElementById('resultado');
+  res.classList.add('visivel');
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  enviarLead(frase, indice);
+}
+
+const WEBHOOK = "https://script.google.com/macros/s/AKfycbzsVpO_OoWVjENJyDP2MCY-wGNqSnuz1oc6txaATRksQNRJCwrOaJaKlGzv2bQQI0I/exec";
+window._leadAdv = {};
+
+function enviarLead(frase, indice) {
+  const d = window._leadAdv;
+  if (!d.whatsapp) return;
+  fetch(WEBHOOK, {
+    method: 'POST', mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      aba: 'Scanner Advogados',
+      nome: d.nome || '',
+      whatsapp: d.whatsapp,
+      indice,
+      frase,
+      data: new Date().toLocaleString('pt-BR', {timeZone:'America/Sao_Paulo'})
+    })
+  }).catch(()=>{});
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.question-block').forEach((b,i) => {
+    setTimeout(() => b.classList.add('visible'), 100*i + 80);
+  });
+});
+</script>
+</body>
+</html>
