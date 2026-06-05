@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico VIDA Advogados — Ivan Vianna CFP®</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul:   #1a2e4a;
+  --azul2:  #243f65;
+  --ouro:   #d7ae4d;
+  --ouro2:  #f8e38c;
+  --branco: #ffffff;
+  --fundo:  #f7f6f2;
+  --borda:  #e2ddd5;
+  --texto:  #1a1a1a;
+  --sub:    #3a3a3a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--fundo); color: var(--texto); }
+
+/* HEADER */
+.header { background: var(--azul); padding: 3rem 1.5rem 2.5rem; text-align: center; position: relative; overflow: hidden; }
+.header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, transparent, transparent 60px, rgba(248,227,140,0.02) 60px, rgba(248,227,140,0.02) 61px); }
+.header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
+.header-eyebrow { font-size: 1rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ouro); margin-bottom: 1rem; position: relative; }
+.header-titulo { font-family: 'Libre Baskerville', serif; font-size: clamp(1.6rem, 4.5vw, 2.6rem); font-weight: 400; color: var(--branco); line-height: 1.15; margin-bottom: 0.75rem; position: relative; }
+.header-titulo strong { color: var(--ouro2); font-style: italic; }
+.header-sub { font-size: 1rem; color: var(--branco); font-style: italic; line-height: 1.65; max-width: 580px; margin: 0 auto 2rem; position: relative; }
+.header-tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; position: relative; }
+.header-tag { background: rgba(248,227,140,0.10); border: 1px solid rgba(248,227,140,0.25); color: var(--ouro2); font-size: 1rem; padding: 6px 14px; border-radius: 2px; }
+
+/* DECLARAÇÃO */
+.declaracao { max-width: 720px; margin: 3rem auto; padding: 0 1.5rem; }
+.decl-inner { background: var(--branco); border: 1px solid var(--borda); border-left: 4px solid var(--ouro); border-radius: 3px; padding: 2rem; }
+.decl-texto { font-family: 'Libre Baskerville', serif; font-size: clamp(1.05rem, 2.5vw, 1.25rem); color: var(--azul); line-height: 1.7; font-style: italic; margin-bottom: 1rem; }
+.decl-texto strong { font-style: normal; color: var(--texto); }
+
+/* SEÇÕES */
+.secao { max-width: 720px; margin: 0 auto 3rem; padding: 0 1.5rem; }
+.secao-kicker { font-size: 1rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ouro); margin-bottom: 0.75rem; }
+.secao-titulo { font-family: 'Libre Baskerville', serif; font-size: clamp(1.2rem, 3vw, 1.6rem); color: var(--azul); line-height: 1.25; margin-bottom: 1.25rem; }
+
+/* RISCOS */
+.riscos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .riscos-grid { grid-template-columns: 1fr; } }
+.risco-card { background: var(--branco); border: 1px solid var(--borda); border-top: 3px solid var(--azul); border-radius: 3px; padding: 1.25rem 1.5rem; }
+.risco-num { font-family: 'Libre Baskerville', serif; font-size: 1.8rem; font-weight: 700; color: rgba(26,46,74,0.15); line-height: 1; margin-bottom: 6px; }
+.risco-nome { font-size: 1rem; font-weight: 700; color: var(--azul); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.risco-desc { font-size: 1rem; color: var(--sub); line-height: 1.55; }
+
+/* O QUE VOCÊ RECEBE */
+.entrega-lista { list-style: none; }
+.entrega-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--borda); }
+.entrega-item:last-child { border-bottom: none; }
+.entrega-icone { width: 32px; height: 32px; background: var(--azul); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.entrega-icone span { color: var(--ouro2); font-weight: 700; font-size: 1rem; }
+.entrega-txt h4 { font-size: 1rem; font-weight: 700; color: var(--texto); margin-bottom: 3px; }
+.entrega-txt p { font-size: 1rem; color: var(--sub); line-height: 1.55; }
+
+/* SOBRE */
+.sobre { background: var(--azul); padding: 2.5rem 1.5rem; margin-bottom: 3rem; }
+.sobre-inner { max-width: 720px; margin: 0 auto; display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; }
+.sobre-texto { flex: 1; min-width: 280px; }
+.sobre-kicker { font-size: 1rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ouro); margin-bottom: 0.75rem; }
+.sobre-nome { font-family: 'Libre Baskerville', serif; font-size: 1.3rem; color: var(--branco); margin-bottom: 0.5rem; }
+.sobre-titulo { font-size: 1rem; color: var(--ouro2); margin-bottom: 1rem; font-style: italic; }
+.sobre-bio { font-size: 1rem; color: var(--branco); line-height: 1.65; }
+
+/* INVESTIMENTO / CTA */
+.cta-wrap { max-width: 720px; margin: 0 auto 4rem; padding: 0 1.5rem; }
+.cta-box { background: var(--azul); border-radius: 4px; padding: 2.5rem; position: relative; overflow: hidden; }
+.cta-box::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
+.cta-kicker { font-size: 1rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ouro); margin-bottom: 0.75rem; }
+.cta-headline { font-family: 'Libre Baskerville', serif; font-size: clamp(1.2rem, 3vw, 1.6rem); color: var(--branco); line-height: 1.3; margin-bottom: 1.5rem; }
+
+.cta-itens { list-style: none; margin-bottom: 2rem; }
+.cta-itens li { font-size: 1rem; color: var(--branco); line-height: 1.6; padding: 5px 0 5px 22px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.cta-itens li:last-child { border-bottom: none; }
+.cta-itens li::before { content: '✓'; position: absolute; left: 0; color: var(--ouro2); font-weight: 700; }
+
+.cta-preco-wrap { margin-bottom: 1.5rem; }
+.cta-preco-label { font-size: 1rem; color: var(--ouro); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.cta-preco-valor { font-family: 'Libre Baskerville', serif; font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; color: var(--ouro2); line-height: 1; }
+.cta-preco-desc { font-size: 1rem; color: var(--branco); margin-top: 6px; }
+
+.cta-btn { display: block; text-align: center; background: linear-gradient(135deg, var(--ouro2), var(--ouro), var(--ouro2)); color: var(--azul); font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 16px 32px; border-radius: 3px; text-decoration: none; margin-bottom: 12px; transition: opacity 0.2s; }
+.cta-btn:hover { opacity: 0.88; }
+.cta-nota { font-size: 1rem; color: var(--branco); text-align: center; font-style: italic; }
+
+/* RODAPÉ */
+.assinatura { max-width: 720px; margin: 0 auto; padding: 1.5rem 1.5rem 2rem; text-align: center; border-top: 1px solid var(--borda); }
+.assinatura p { font-size: 1rem; color: var(--sub); line-height: 1.6; font-style: italic; }
+.assinatura a { color: var(--azul); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-eyebrow">Diagnóstico VIDA · Advogados · Ivan Vianna CFP®</div>
+  <h1 class="header-titulo">Você protege o patrimônio dos clientes.<br><strong>Quem protege o seu?</strong></h1>
+  <p class="header-sub">Continuidade Patrimonial para Advogados, Sócios de Escritórios e Profissionais da Advocacia</p>
+  <div class="header-tags">
+    <span class="header-tag">Advogados com patrimônio</span>
+    <span class="header-tag">Sócios de escritório</span>
+    <span class="header-tag">Acima de 35 anos</span>
+  </div>
+</div>
+
+<!-- DECLARAÇÃO -->
+<div class="declaracao">
+  <div class="decl-inner">
+    <p class="decl-texto">Você conhece os instrumentos que protegem patrimônio. Conhece sucessão, tributação, acordos societários. <strong>E ainda assim nunca aplicou isso a si mesmo.</strong> Esse é o ponto cego mais comum na advocacia — e o mais caro.</p>
+  </div>
+</div>
+
+<!-- OS 4 RISCOS -->
+<div class="secao">
+  <div class="secao-kicker">O que será mapeado</div>
+  <div class="secao-titulo">Quatro riscos que podem destruir o que você levou anos para construir.</div>
+  <div class="riscos-grid">
+    <div class="risco-card">
+      <div class="risco-num">1</div>
+      <div class="risco-nome">Patrimônio pessoal</div>
+      <div class="risco-desc">Proteção, reserva de independência e separação real entre você e o risco do escritório.</div>
+    </div>
+    <div class="risco-card">
+      <div class="risco-num">2</div>
+      <div class="risco-nome">Escritório</div>
+      <div class="risco-desc">Estrutura tributária, eficiência fiscal e proteção das cotas contra credores pessoais.</div>
+    </div>
+    <div class="risco-card">
+      <div class="risco-num">3</div>
+      <div class="risco-nome">Sócios</div>
+      <div class="risco-desc">Governança societária, mecanismos de saída e continuidade em caso de conflito ou falecimento.</div>
+    </div>
+    <div class="risco-card">
+      <div class="risco-num">4</div>
+      <div class="risco-nome">Família</div>
+      <div class="risco-desc">Sucessão, testamento, planejamento de ITCMD e mapa de acesso aos ativos para os herdeiros.</div>
+    </div>
+  </div>
+</div>
+
+<!-- O QUE VOCÊ RECEBE -->
+<div class="secao">
+  <div class="secao-kicker">Como funciona</div>
+  <div class="secao-titulo">Três etapas do diagnóstico ao plano de ação.</div>
+  <ul class="entrega-lista">
+    <li class="entrega-item">
+      <div class="entrega-icone"><span>1</span></div>
+      <div class="entrega-txt">
+        <h4>Relatório VIDA personalizado</h4>
+        <p>Após a compra, você acessa um formulário com 12 perguntas sobre os 4 riscos. O sistema gera seu Índice VIDA de Estrutura Patrimonial e identifica suas vulnerabilidades prioritárias.</p>
+      </div>
+    </li>
+    <li class="entrega-item">
+      <div class="entrega-icone"><span>2</span></div>
+      <div class="entrega-txt">
+        <h4>Sessão estratégica de 60 minutos</h4>
+        <p>Ivan Vianna CFP® revisa seu relatório, aprofunda a leitura das vulnerabilidades identificadas e define com você a sequência exata de correção — com prioridade, prazo e impacto real.</p>
+      </div>
+    </li>
+    <li class="entrega-item">
+      <div class="entrega-icone"><span>3</span></div>
+      <div class="entrega-txt">
+        <h4>Plano de ação patrimonial</h4>
+        <p>Ao final da sessão, você tem clareza sobre o que corrigir primeiro, como fazer e qual o custo de não agir — com próximos passos definidos e priorizados.</p>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- SOBRE IVAN -->
+<div class="sobre">
+  <div class="sobre-inner">
+    <div class="sobre-texto">
+      <div class="sobre-kicker">Quem conduz</div>
+      <div class="sobre-nome">Ivan Vianna · CFP®</div>
+      <div class="sobre-titulo">Planejador financeiro · Arquiteto de patrimônio</div>
+      <p class="sobre-bio">27 anos no mercado financeiro. Mais de 15 anos em planejamento financeiro pessoal e patrimonial. Especialista em continuidade patrimonial para advogados, empresários e executivos de alta renda. Pós-graduando em Neurociências e Comportamento — PUCRS.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA / INVESTIMENTO -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <div class="cta-kicker">Investimento</div>
+    <div class="cta-headline">O relatório identifica os riscos.<br>A sessão mostra como corrigir cada um deles.</div>
+
+    <ul class="cta-itens">
+      <li>Acesso ao formulário de Diagnóstico VIDA Advogados</li>
+      <li>Relatório VIDA personalizado gerado instantaneamente</li>
+      <li>Sessão estratégica individual de 60 minutos com Ivan Vianna CFP®</li>
+      <li>Priorização das vulnerabilidades por impacto e urgência</li>
+      <li>Plano de ação com sequência, prazo e próximos passos</li>
+    </ul>
+
+    <div class="cta-preco-wrap">
+      <div class="cta-preco-label">Investimento único</div>
+      <div class="cta-preco-valor">R$ 1.197,00</div>
+      <div class="cta-preco-desc">Sessão individual · Relatório personalizado · Plano de ação</div>
+    </div>
+
+    <a class="cta-btn" href="https://pay.hotmart.com/Q106154241G" target="_blank">Adquirir diagnóstico →</a>
+    <p class="cta-nota">Após a compra, Ivan entrará em contato via WhatsApp em até 24 horas para agendar sua sessão.</p>
+  </div>
+</div>
+
+<div class="assinatura">
+  <p>Ivan Vianna · CFP® · Planejador financeiro · Arquiteto de patrimônio<br>
+  CNPJ 56.099.913/0001-61 · <a href="https://ivanviannafinancas.com.br">ivanviannafinancas.com.br</a> · <a href="https://www.linkedin.com/in/ivanlvianna/">linkedin.com/in/ivanlvianna</a></p>
+</div>
+
+</body>
+</html>
