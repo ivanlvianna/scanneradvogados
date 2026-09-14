@@ -1,340 +1,168 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Índice VIDA de Estrutura Patrimonial para Advogados — Ivan Vianna CFP®</title>
-<style>
-:root {
-  --azul:   #1a2e4a;
-  --azul2:  #243f65;
-  --ouro:   #d7ae4d;
-  --ouro2:  #f8e38c;
-  --branco: #ffffff;
-  --fundo:  #f7f6f2;
-  --borda:  #e2ddd5;
-  --texto:  #1a1a1a;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: 'Georgia', serif; background: var(--fundo); color: var(--texto); min-height: 100vh; }
-
-.header { background: var(--azul); padding: 2.5rem 1.5rem 2.2rem; text-align: center; position: relative; overflow: hidden; }
-.header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
-.header-eyebrow { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2.5px; color: var(--ouro); text-transform: uppercase; margin-bottom: 1rem; }
-.header-title { font-size: clamp(1.6rem, 4.5vw, 2.4rem); font-weight: 400; color: var(--branco); line-height: 1.2; margin-bottom: 0.75rem; }
-.header-title strong { color: var(--ouro2); font-weight: 700; font-style: italic; }
-.header-sub { font-size: 1rem; color: var(--branco); font-style: italic; line-height: 1.6; max-width: 540px; margin: 0 auto; }
-
-.progress-bar { max-width: 680px; margin: 1.75rem auto 0; padding: 0 1.25rem; }
-.progress-track { height: 3px; background: var(--borda); border-radius: 2px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--azul2), var(--ouro)); border-radius: 2px; transition: width 0.5s ease; width: 0%; }
-.progress-label { font-size: 1rem; color: var(--texto); font-family: 'Courier New', monospace; margin-top: 6px; }
-
-.questions-wrap { max-width: 680px; margin: 1.5rem auto 0; padding: 0 1.25rem 2rem; }
-
-.risco-header { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; color: var(--azul2); border-bottom: 1px solid var(--borda); padding-bottom: 6px; margin: 2rem 0 1rem; }
-.risco-header:first-child { margin-top: 0; }
-
-.question-block { background: var(--branco); border: 1px solid var(--borda); border-radius: 4px; padding: 1.5rem; margin-bottom: 1rem; opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
-.question-block.visible { opacity: 1; transform: translateY(0); }
-.question-block.answered { border-left: 3px solid var(--azul); }
-
-.q-numero { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; color: var(--ouro); text-transform: uppercase; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
-.q-numero::after { content: ''; flex: 1; height: 1px; background: var(--borda); }
-.q-texto { font-size: 1.05rem; line-height: 1.6; color: var(--texto); margin-bottom: 1.25rem; }
-.q-texto em { font-style: normal; color: var(--azul); font-weight: 600; }
-
-.opcoes { display: flex; flex-direction: column; gap: 8px; }
-.opcao { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border: 1px solid var(--borda); border-radius: 3px; cursor: pointer; transition: all 0.15s; background: var(--fundo); font-size: 1rem; line-height: 1.5; color: var(--texto); text-align: left; width: 100%; font-family: 'Georgia', serif; }
-.opcao:hover { border-color: var(--azul); background: #eef0f5; }
-.opcao.selecionada { background: var(--azul); color: var(--branco); border-color: var(--azul); }
-.opcao-letra { font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; color: var(--ouro); min-width: 16px; flex-shrink: 0; }
-.opcao.selecionada .opcao-letra { color: var(--ouro2); }
-
-.btn-wrap { text-align: center; margin: 2rem 0 1rem; }
-.btn-ver { background: var(--azul); color: var(--ouro2); border: none; padding: 14px 40px; font-size: 1rem; font-family: 'Courier New', monospace; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 2px; }
-.btn-ver:disabled { opacity: 0.3; cursor: not-allowed; }
-.btn-note { font-size: 1rem; color: var(--texto); margin-top: 8px; font-style: italic; }
-
-.gate-wrap { display: none; max-width: 480px; margin: 0 auto; background: var(--azul); border: 2px solid var(--ouro); border-radius: 6px; padding: 2rem; }
-.gate-titulo { font-size: 1rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ouro2); margin-bottom: 1.5rem; }
-.gate-label { display: block; font-size: 1rem; font-weight: 700; color: var(--branco); margin-bottom: 6px; }
-.gate-input { width: 100%; border: 1.5px solid var(--ouro); border-radius: 4px; padding: 12px 14px; background: var(--branco); color: var(--texto); font-size: 1rem; font-family: 'Georgia', serif; outline: none; margin-bottom: 14px; }
-.gate-erro { display: none; font-size: 1rem; color: var(--ouro2); font-weight: 600; margin-bottom: 10px; }
-.gate-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--ouro2), var(--ouro), var(--ouro2)); color: var(--azul); border: none; border-radius: 4px; font-size: 1rem; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: 1px; cursor: pointer; }
-
-.resultado { display: none; max-width: 680px; margin: 0 auto; padding: 0 1.25rem 3rem; }
-.resultado.visivel { display: block; }
-
-.res-header { background: var(--azul); border-radius: 4px 4px 0 0; padding: 2.25rem 1.75rem; position: relative; overflow: hidden; }
-.res-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
-.res-eyebrow { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; color: var(--ouro); text-transform: uppercase; margin-bottom: 0.5rem; }
-.res-indice { font-family: 'Courier New', monospace; font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; color: var(--ouro2); line-height: 1; margin-bottom: 0.25rem; }
-.res-frase { font-size: clamp(1.1rem, 3vw, 1.4rem); color: var(--branco); font-style: italic; line-height: 1.35; margin-bottom: 1.25rem; max-width: 500px; }
-.res-barra { height: 5px; background: rgba(255,255,255,0.30); border-radius: 3px; overflow: hidden; }
-.res-barra-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--ouro), var(--ouro2)); transition: width 1s ease 0.3s; width: 0%; }
-
-.res-body { background: var(--branco); border: 1px solid var(--borda); border-top: none; border-radius: 0 0 4px 4px; padding: 1.75rem; }
-.res-section { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; color: var(--texto); border-bottom: 1px solid var(--borda); padding-bottom: 6px; margin-bottom: 1rem; }
-.res-vulns { list-style: none; margin-bottom: 1.5rem; }
-.res-vulns li { padding: 10px 0 10px 20px; border-bottom: 1px solid var(--borda); font-size: 1rem; line-height: 1.6; color: var(--texto); position: relative; }
-.res-vulns li:last-child { border-bottom: none; }
-.res-vulns li::before { content: '—'; position: absolute; left: 0; color: var(--ouro); font-weight: 700; }
-
-.cta-box { background: var(--azul); border-radius: 3px; padding: 1.75rem; margin-top: 1.5rem; position: relative; overflow: hidden; }
-.cta-box::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--ouro), transparent); }
-.cta-kicker { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; color: var(--ouro); text-transform: uppercase; margin-bottom: 0.75rem; }
-.cta-titulo { font-size: 1.1rem; color: var(--branco); line-height: 1.45; margin-bottom: 1rem; }
-.cta-items { list-style: none; margin-bottom: 1.25rem; }
-.cta-items li { font-size: 1rem; color: var(--branco); line-height: 1.55; padding: 5px 0 5px 20px; position: relative; }
-.cta-items li::before { content: '✓'; position: absolute; left: 0; color: var(--ouro2); font-weight: 700; }
-.cta-btn { display: inline-block; background: linear-gradient(135deg, var(--ouro2), var(--ouro), var(--ouro2)); color: var(--azul); font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 13px 28px; border-radius: 2px; text-decoration: none; }
-
-.assinatura { max-width: 680px; margin: 0 auto; padding: 1.5rem 1.25rem 2rem; text-align: center; border-top: 1px solid var(--borda); }
-.assinatura p { font-size: 1rem; color: var(--texto); line-height: 1.6; font-style: italic; }
-.assinatura a { color: var(--azul); text-decoration: none; }
-</style>
-</head>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Valor em Patrimônio VIDA™ — Advogados · Candidato v0.3</title><meta name="description" content="Scanner inicial para advogados sobre patrimônio e continuidade."><style>
+:root{--v:#1A3C2E;--g:#d7ae4d;--gc:#f8e38c;--bg:#f7f4ed;--tx:#1d211f;--mut:#626a65;--bd:#d9d5ca}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--tx);line-height:1.55}
+header{background:var(--v);color:#fff;padding:42px 20px;text-align:center;border-bottom:3px solid var(--g)}
+header .ey{color:var(--gc);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+h1{font-family:Georgia,serif;font-size:clamp(30px,6vw,48px);margin:12px auto;max-width:850px;line-height:1.1}
+header p{max-width:760px;margin:auto;font-size:17px}.wrap{max-width:800px;margin:auto;padding:30px 20px 70px}
+.box{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:24px;margin:18px 0}
+.progress{height:6px;background:#e7e4dc;border-radius:10px;overflow:hidden}.fill{height:100%;background:var(--g);width:0;transition:.25s}
+.meta{display:flex;justify-content:space-between;color:var(--mut);font-size:13px;margin:8px 0 22px;gap:12px}.dim{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--v);font-weight:700}
+.q h2{font-family:Georgia,serif;font-size:23px;line-height:1.3}.sub{color:var(--mut);margin:-6px 0 18px}
+.opts{display:grid;gap:9px}.opt{padding:13px;border:1px solid var(--bd);border-radius:8px;background:#fff;text-align:left;cursor:pointer;font-size:15px}
+.opt.sel,.opt:hover{border-color:var(--g);background:#fffaf0}.actions{display:flex;justify-content:space-between;margin-top:18px;gap:10px}
+.btn{border:0;border-radius:8px;padding:13px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}.btn:disabled{opacity:.35}
+.primary{background:var(--v);color:#fff}.secondary{background:#eeeae0;color:var(--tx)}.hidden{display:none}
+.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border:1px solid var(--bd);border-radius:8px;background:#fff}
+.consent{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--bd);border-radius:8px;margin:12px 0;font-size:13px}.consent input{margin-top:3px}
+.score{font-size:48px;font-weight:700;color:var(--v)}.tag{display:inline-block;background:#eef4f0;color:var(--v);padding:7px 10px;border-radius:20px;font-weight:700;font-size:13px}
+.signals{padding-left:20px}.signals li{margin:8px 0}.note{font-size:13px;color:var(--mut)}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.metric{border:1px solid var(--bd);border-radius:8px;padding:14px}.metric strong{display:block;color:var(--v);font-size:26px}
+.disclaimer{font-size:12px;color:var(--mut);border-top:1px solid var(--bd);padding-top:15px;margin-top:24px}footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
+@media(max-width:650px){.result-grid{grid-template-columns:1fr}.meta{flex-direction:column}}
+</style></head>
 <body>
+<header><div class="ey">Método VIDA™ · DESCUBRA · Gratuito</div><h1>Valor em Patrimônio VIDA™ — Advogados</h1><p>Uma leitura inicial sobre a relação entre escritório, patrimônio pessoal, liquidez, governança societária, remuneração e continuidade familiar.</p></header>
+<main class="wrap">
+<div id="quiz" class="box"><div class="progress"><div id="fill" class="fill"></div></div><div class="meta"><span id="pos"></span><span>Autoavaliação inicial</span></div><div id="host"></div></div>
+<div id="capture" class="box hidden"><h2>Seu resultado está pronto.</h2>
+<div class="field"><label for="nome">Nome</label><input id="nome" autocomplete="name"></div>
+<div class="field"><label for="wpp">WhatsApp</label><input id="wpp" autocomplete="tel"></div>
+<div class="field"><label for="email">E-mail (opcional)</label><input id="email" type="email" autocomplete="email"></div>
 
-<div class="header">
-  <div class="header-eyebrow">Método VIDA · Ivan Vianna CFP® · Gratuito</div>
-  <h1 class="header-title">Você protege o patrimônio dos clientes.<br><strong>E o seu próprio?</strong></h1>
-  <p class="header-sub">Os riscos patrimoniais que advogados identificam nos clientes — mas ignoram em si mesmos.</p>
-</div>
-
-<div class="progress-bar" id="progressWrap">
-  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-  <div class="progress-label" id="progressLabel">0 de 6 respondidas</div>
-</div>
-
-<div class="questions-wrap" id="questionsWrap">
-
-  <div class="risco-header">Risco 1 — Patrimônio pessoal</div>
-
-  <div class="question-block" data-q="1">
-    <div class="q-numero">01</div>
-    <p class="q-texto">Se você recebesse hoje uma ação de <em>R$ 5 milhões contra seu escritório</em>, quanto do seu patrimônio pessoal estaria protegido?</p>
-    <div class="opcoes">
-      <button class="opcao" data-valor="0" onclick="sel(this,1)"><span class="opcao-letra">A</span>Não faço ideia. Nunca contratei uma análise formal para saber.</button>
-      <button class="opcao" data-valor="1" onclick="sel(this,1)"><span class="opcao-letra">B</span>Acredito que parte estaria protegida, mas nunca validei isso tecnicamente.</button>
-      <button class="opcao" data-valor="2" onclick="sel(this,1)"><span class="opcao-letra">C</span>Já validei isso formalmente e sei exatamente qual patrimônio estaria protegido.</button>
-    </div>
-  </div>
-
-  <div class="question-block" data-q="2">
-    <div class="q-numero">02</div>
-    <p class="q-texto">Se você ficasse <em>60 dias sem trabalhar</em> por doença ou acidente, seu padrão de vida estaria garantido por quanto tempo?</p>
-    <div class="opcoes">
-      <button class="opcao" data-valor="0" onclick="sel(this,2)"><span class="opcao-letra">A</span>Nunca me fiz essa pergunta de forma concreta — não sei responder com segurança.</button>
-      <button class="opcao" data-valor="1" onclick="sel(this,2)"><span class="opcao-letra">B</span>Tenho alguma reserva, mas sei que não seria suficiente por muito tempo.</button>
-      <button class="opcao" data-valor="2" onclick="sel(this,2)"><span class="opcao-letra">C</span>Sim — tenho reserva estruturada que manteria meu padrão por mais de 6 meses.</button>
-    </div>
-  </div>
-
-  <div class="risco-header">Risco 2 — Escritório</div>
-
-  <div class="question-block" data-q="3">
-    <div class="q-numero">03</div>
-    <p class="q-texto">Se amanhã você tivesse um problema financeiro pessoal grave, <em>suas cotas no escritório poderiam ser afetadas?</em></p>
-    <div class="opcoes">
-      <button class="opcao" data-valor="0" onclick="sel(this,3)"><span class="opcao-letra">A</span>Nunca analisei isso — não sei se minhas cotas estariam protegidas nesse cenário.</button>
-      <button class="opcao" data-valor="1" onclick="sel(this,3)"><span class="opcao-letra">B</span>Acredito que sim, mas nunca fiz uma análise formal para confirmar.</button>
-      <button class="opcao" data-valor="2" onclick="sel(this,3)"><span class="opcao-letra">C</span>Sei exatamente quais mecanismos protegem minhas cotas e já validei isso formalmente.</button>
-    </div>
-  </div>
-
-  <div class="question-block" data-q="4">
-    <div class="q-numero">04</div>
-    <p class="q-texto">A remuneração que você retira do escritório foi estruturada para <em>pagar menos imposto legalmente?</em></p>
-    <div class="opcoes">
-      <button class="opcao" data-valor="0" onclick="sel(this,4)"><span class="opcao-letra">A</span>Nunca fizemos uma análise técnica disso — retiramos conforme o caixa permite.</button>
-      <button class="opcao" data-valor="1" onclick="sel(this,4)"><span class="opcao-letra">B</span>Temos alguma estrutura, mas não sei se é a mais eficiente — nunca foi revisada.</button>
-      <button class="opcao" data-valor="2" onclick="sel(this,4)"><span class="opcao-letra">C</span>Sim — já foi analisada formalmente e está calibrada para eficiência fiscal.</button>
-    </div>
-  </div>
-
-  <div class="risco-header">Risco 3 — Sócios</div>
-
-  <div class="question-block" data-q="5">
-    <div class="q-numero">05</div>
-    <p class="q-texto">Se um sócio quisesse sair amanhã — ou falecesse — <em>você saberia exatamente o que acontece com o escritório?</em></p>
-    <div class="opcoes">
-      <button class="opcao" data-valor="0" onclick="sel(this,5)"><span class="opcao-letra">A</span>Nunca formalizamos isso — operamos na confiança mútua e no contrato social básico.</button>
-      <button class="opcao" data-valor="1" onclick="sel(this,5)"><span class="opcao-letra">B</span>Temos contrato social, mas sem protocolo específico para saída, conflito ou falecimento.</button>
-      <button class="opcao" data-valor="2" onclick="sel(this,5)"><span class="opcao-letra">C</span>Sim — acordo completo, revisado, cobrindo saída, avaliação de cotas e sucessão.</button>
-    </div>
-  </div>
-
-  <div class="risco-header">Risco 4 — Família</div>
-
-  <div class="question-block" data-q="6">
-    <div class="q-numero">06</div>
-    <p class="q-texto">Se você fosse incapacitado permanentemente amanhã, <em>sua família saberia o que fazer com seu patrimônio e suas cotas?</em></p>
-    <div class="opcoes">
-      <button class="opcao" data-valor="0" onclick="sel(this,6)"><span class="opcao-letra">A</span>Nunca organizei isso formalmente — seria um caos para quem precisasse agir.</button>
-      <button class="opcao" data-valor="1" onclick="sel(this,6)"><span class="opcao-letra">B</span>Falei sobre isso informalmente, mas nunca documentei de forma estruturada.</button>
-      <button class="opcao" data-valor="2" onclick="sel(this,6)"><span class="opcao-letra">C</span>Sim — testamento feito, beneficiários definidos e instruções documentadas para a família.</button>
-    </div>
-  </div>
-
-  <!-- GATE -->
-  <div class="btn-wrap">
-    <div class="gate-wrap" id="gate-captura">
-      <div class="gate-titulo">Para ver seu Índice VIDA</div>
-      <label class="gate-label" for="gate-nome">Nome</label>
-      <input class="gate-input" id="gate-nome" type="text" placeholder="Seu nome" autocomplete="name">
-      <label class="gate-label" for="gate-wpp">WhatsApp <span style="color:var(--ouro2);">*</span></label>
-      <input class="gate-input" id="gate-wpp" type="tel" placeholder="(11) 99999-9999" autocomplete="tel">
-      <div class="gate-erro" id="gate-erro">Informe seu WhatsApp para continuar.</div>
-      <div id="lgpd-aviso" style="margin:16px 0;padding:14px;border:1px solid #d9d2c2;border-radius:8px;font-size:13px;line-height:1.5;color:#3a3a3a;text-align:left;"><p style="margin:0 0 10px 0;">Antes de continuar: os dados que voce informar (nome, contato e suas respostas) sao tratados por <strong>Ivan Vianna, CFP</strong> (CNPJ 56.099.913/0001-61) para gerar o seu resultado e, caso autorize, para contato sobre este diagnostico. Nao coletamos dados sensiveis (Art. 5 II, LGPD). Solicitacoes de acesso, correcao ou eliminacao: <a href="mailto:ivan@ivanviannafinancas.com.br">ivan@ivanviannafinancas.com.br</a>.</p><label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;cursor:pointer;"><input type="checkbox" id="lgpd-consent-dados" style="margin-top:3px;"><span>Autorizo o tratamento dos dados informados para gerar meu resultado e para contato sobre este diagnostico. <strong>(obrigatorio)</strong></span></label><label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;"><input type="checkbox" id="lgpd-consent-marketing" style="margin-top:3px;"><span>Tambem quero receber conteudo sobre planejamento financeiro e o Metodo VIDA por e-mail/WhatsApp. <strong>(opcional)</strong></span></label></div><button class="gate-btn" onclick="if(!document.getElementById('lgpd-consent-dados').checked){alert('Marque a autorizacao de tratamento de dados para continuar.');return;}confirmarGate()">Ver meu Índice VIDA →</button>
-    </div>
-    <button class="btn-ver" id="btnVer" onclick="abrirGate()" disabled>Ver meu Índice VIDA →</button>
-    <p class="btn-note" id="btnNote">Responda todas as perguntas para liberar o resultado.</p>
-  </div>
-
-</div>
-
-<!-- RESULTADO -->
-<div class="resultado" id="resultado">
-  <div class="res-header">
-    <div class="res-eyebrow">Índice VIDA de Estrutura Patrimonial · Advogados</div>
-    <div class="res-indice" id="resIndice">—</div>
-    <div class="res-frase" id="resFrase"></div>
-    <div class="res-barra"><div class="res-barra-fill" id="resBarraFill"></div></div>
-  </div>
-  <div class="res-body">
-    <div class="res-section">O que pode destruir valor no seu patrimônio</div>
-    <ul class="res-vulns" id="resVulns"></ul>
-    <div class="cta-box">
-      <div class="cta-kicker">Próximo passo</div>
-      <div class="cta-titulo" id="ctaTitulo"></div>
-      <ul class="cta-items">
-        <li>Onde estão as vulnerabilidades exatas</li>
-        <li>Quanto cada uma pode custar</li>
-        <li>Qual a prioridade de correção</li>
-        <li>Qual o plano de ação</li>
-      </ul>
-      <a class="cta-btn" href="https://ivanlvianna.github.io/scanneradvogados/landingdiagnosticoadvogados.html" target="_blank">Ver o que precisa ser corrigido →</a>
-    </div>
-  </div>
-</div>
-
-<div class="assinatura">
-  <p>Ivan Vianna · CFP® · Planejador financeiro · Arquiteto de patrimônio<br>
-  CNPJ 56.099.913/0001-61 · <a href="https://ivanviannafinancas.com.br">ivanviannafinancas.com.br</a> · <a href="https://www.linkedin.com/in/ivanlvianna/">linkedin.com/in/ivanlvianna</a></p>
-</div>
-
+<label class="consent"><input id="cd" type="checkbox"><span>Autorizo o tratamento dos dados e respostas para gerar este resultado e permitir contato relacionado a este Scanner. Posso solicitar acesso, correção ou exclusão pelo e-mail ivan@ivanviannafinancas.com.br. <strong>Obrigatório.</strong></span></label>
+<label class="consent"><input id="cm" type="checkbox"><span>Também quero receber conteúdos do Método VIDA™ por e-mail ou WhatsApp. <strong>Opcional.</strong></span></label>
+<p id="err" class="note hidden" style="color:#8a2f2f">Preencha os campos obrigatórios e aceite o tratamento necessário.</p>
+<button class="btn primary" onclick="showResult()">Ver minha leitura →</button></div>
+<div id="result" class="box hidden"><div class="tag">LEITURA INICIAL · AUTOAVALIAÇÃO</div><h2 id="title"></h2>
+<div id="scoreWrap" class="score"><span id="score"></span><small style="font-size:18px">/100</small></div><p class="small"><strong>Índice orientativo:</strong> organiza apenas as respostas deste Scanner. Não representa percentual de independência, proteção, risco ou probabilidade de evento.</p>
+<p id="text"></p><div id="metrics"></div><h3>Pontos que merecem confirmação profissional</h3><ul id="signals" class="signals"></ul><p id="resultNote">O Scanner não determina proteção jurídica, eficiência tributária, responsabilidade patrimonial ou adequação societária. Essas conclusões dependem de documentos, fatos e profissionais competentes.</p>
+<a id="cta" class="btn primary" target="_blank" rel="noopener">Conversar sobre o resultado</a>
+<p class="disclaimer">Este Scanner é uma ferramenta educativa de autoavaliação. O resultado reflete apenas as respostas informadas e não constitui diagnóstico profissional, recomendação de investimento, parecer jurídico, contábil ou tributário, nem substitui planejamento individualizado.</p></div>
+</main>
+<footer>Ivan Vianna · CFP® · Planejador financeiro · Arquiteto de patrimônio · ivanviannafinancas.com.br</footer>
 <script>
-const respostas = {};
-const TOTAL_Q = 6;
-
-function sel(btn, q) {
-  document.querySelectorAll(`.question-block[data-q="${q}"] .opcao`).forEach(b => b.classList.remove('selecionada'));
-  btn.classList.add('selecionada');
-  respostas[q] = parseInt(btn.dataset.valor);
-  document.querySelector(`.question-block[data-q="${q}"]`).classList.add('answered');
-  const respondidas = Object.keys(respostas).length;
-  document.getElementById('progressFill').style.width = Math.round((respondidas / TOTAL_Q) * 100) + '%';
-  document.getElementById('progressLabel').textContent = respondidas + ' de 6 respondidas';
-  if (respondidas === TOTAL_Q) document.getElementById('btnVer').disabled = false;
+const CONFIG={"mode": "adv", "publicName": "Valor em Patrimônio VIDA™ — Advogados", "meta": "Scanner inicial para advogados sobre patrimônio e continuidade.", "desc": "Uma leitura inicial sobre a relação entre escritório, patrimônio pessoal, liquidez, governança societária, remuneração e continuidade familiar.", "emailRequired": false};
+const Q=[{"t": "Você conhece, com suporte técnico apropriado, o grau de separação entre seu patrimônio pessoal e os riscos relacionados à atividade profissional ou ao escritório?", "o": [["Nunca analisei formalmente", 0], ["Tenho uma percepção, mas sem validação recente", 1], ["Já houve análise formal e sei quais pontos precisam de revisão", 2]], "dn": "Patrimônio pessoal"}, {"t": "Se sua capacidade de trabalhar fosse interrompida por 60 dias, por quanto tempo seu padrão de vida poderia ser sustentado com recursos já disponíveis?", "o": [["Não sei ou seria por período muito curto", 0], ["Tenho alguma reserva, mas sem cálculo claro", 1], ["Tenho reserva e estimativa documentada superior a 6 meses", 2]], "dn": "Patrimônio pessoal"}, {"t": "Você já analisou como um problema financeiro pessoal relevante poderia interagir com suas cotas, direitos ou obrigações no escritório?", "o": [["Nunca analisei", 0], ["Tenho percepção geral, sem revisão formal", 1], ["Já revisei o tema com documentação e profissionais adequados", 2]], "dn": "Escritório"}, {"t": "A forma de remuneração e distribuição de recursos do escritório é revisada periodicamente sob os aspectos contábil, tributário, societário e financeiro?", "o": [["Não há revisão estruturada", 0], ["Existe alguma estrutura, mas está desatualizada ou pouco documentada", 1], ["Há revisão periódica com profissionais competentes", 2]], "dn": "Escritório"}, {"t": "Os documentos societários tratam de saída, incapacidade, falecimento, avaliação de cotas e continuidade entre sócios?", "o": [["Não ou não sei", 0], ["Tratam parcialmente do tema", 1], ["Sim, e houve revisão recente", 2]], "dn": "Sócios"}, {"t": "Se você fosse incapacitado permanentemente, sua família saberia onde estão as informações patrimoniais e quais profissionais ou documentos consultar?", "o": [["Não, a informação está concentrada em mim", 0], ["Existe alguma orientação informal", 1], ["Há documentação, responsáveis e orientação organizada", 2]], "dn": "Família"}];
+const WEBHOOK="https://script.google.com/macros/s/AKfycbzsVpO_OoWVjENJyDP2MCY-wGNqSnuz1oc6txaATRksQNRJCwrOaJaK1Gzv2bQQI0I/exec";
+function criarEventIdVIDA(){
+  try{if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();}catch(_){}
+  return 'evt-'+Date.now()+'-'+Math.random().toString(16).slice(2);
+}
+function enviarCapturaCanonicaVIDA(sheet,dados){
+  try{
+    const payload=Object.assign({
+      capture_type:'scanner_canonico_v0.3',
+      sheet:sheet,
+      event_id:criarEventIdVIDA(),
+      hp:''
+    },dados);
+    fetch(WEBHOOK,{
+      method:'POST',
+      mode:'no-cors',
+      keepalive:true,
+      headers:{'Content-Type':'text/plain;charset=UTF-8'},
+      body:JSON.stringify(payload)
+    }).catch(()=>{});
+  }catch(_){}
 }
 
-function abrirGate() {
-  document.getElementById('btnVer').style.display = 'none';
-  document.getElementById('btnNote').style.display = 'none';
-  document.getElementById('gate-captura').style.display = 'block';
+const WPP="5511979530555";
+let cur=0,a=Array(Q.length).fill(null);
+function render(){
+  const q=Q[cur];
+  pos.textContent=`Pergunta ${cur+1} de ${Q.length}`;
+  fill.style.width=`${(cur/Q.length)*100}%`;
+  host.innerHTML=`<div class="q">${q.dn?`<div class="dim">${q.dn}</div>`:''}<h2>${q.t}</h2>${q.s?`<p class="sub">${q.s}</p>`:''}<div class="opts">${q.o.map((o,i)=>`<button class="opt ${a[cur]===i?'sel':''}" onclick="pick(${i})">${o[0]}</button>`).join('')}</div><div class="actions"><button class="btn secondary" onclick="back()" ${cur===0?'disabled':''}>← Voltar</button><button class="btn primary" onclick="next()" ${a[cur]===null?'disabled':''}>${cur===Q.length-1?'Calcular leitura':'Continuar →'}</button></div></div>`;
 }
-
-function confirmarGate() {
-  const nome = (document.getElementById('gate-nome').value || '').trim();
-  const wpp  = (document.getElementById('gate-wpp').value || '').replace(/\D/g,'');
-  if (wpp.length < 10) { document.getElementById('gate-erro').style.display = 'block'; return; }
-  document.getElementById('gate-erro').style.display = 'none';
-  window._leadAdv = { nome, whatsapp: wpp };
-  mostrarResultado();
-}
-
-function mostrarResultado() {
-  const total = Object.values(respostas).reduce((a,b) => a+b, 0);
-  const indice = Math.round((total / 12) * 100);
-  let frase, vulns, ctaTitulo;
-
-  if (indice >= 75) {
-    frase = 'Você construiu patrimônio. Agora precisa garantir sua continuidade.';
-    vulns = [
-      'Acordos societários precisam de revisão periódica — o que protegia 2 sócios pode não funcionar com o crescimento do escritório.',
-      'A legislação de ITCMD está mudando em vários estados — o planejamento sucessório precisa acompanhar.',
-      'Mesmo com estrutura sólida, há oportunidades de eficiência fiscal que só aparecem em análise técnica atualizada.'
-    ];
-    ctaTitulo = 'Seu Índice VIDA identificou vulnerabilidades residuais. O Diagnóstico VIDA mapeia exatamente onde estão e como fechar cada uma.';
-  } else if (indice >= 45) {
-    frase = 'Cada ano sem estrutura aumenta o custo da correção.';
-    vulns = [
-      'Sem acordo de sócios completo, um conflito ou falecimento pode virar disputa que destrói o que levou anos para construir.',
-      'A mistura PF/PJ sem blindagem expõe seu patrimônio pessoal ao risco profissional do escritório.',
-      'Sem acumulação fora do escritório, sua independência financeira depende de você continuar trabalhando — não de você escolher parar.'
-    ];
-    ctaTitulo = 'Seu Índice VIDA encontrou gaps em múltiplas frentes. O Diagnóstico VIDA define a ordem exata de correção — com prioridade e prazo.';
-  } else if (indice >= 20) {
-    frase = 'Seu escritório vale mais do que sua estrutura patrimonial.';
-    vulns = [
-      'Seu patrimônio pessoal está exposto ao risco do escritório — um processo pode atingir o que levou anos para construir.',
-      'Sem acordo de sócios, um conflito ou falecimento pode forçar a dissolução do escritório nas piores condições.',
-      'A remuneração não estruturada representa imposto desnecessário todo mês — esse custo é invisível sem análise.'
-    ];
-    ctaTitulo = 'Seu Índice VIDA identificou vulnerabilidades críticas. O Diagnóstico VIDA define o que corrigir primeiro e como — em sequência, prazo e prioridade.';
-  } else {
-    frase = 'Seu patrimônio depende de você continuar trabalhando.';
-    vulns = [
-      'Sem separação formal, você e o escritório são o mesmo risco — uma condenação pode atingir tudo que construiu como pessoa física.',
-      'Sem acordo de sócios e sem testamento, você está deixando que a lei decida o que você mesmo sabe decidir melhor.',
-      'Sem estrutura fiscal, você provavelmente paga mais imposto do que deveria todo mês — enquanto os instrumentos para mudar isso existem e são legais.'
-    ];
-    ctaTitulo = 'Seu Índice VIDA revelou exposição em todos os quatro riscos. O Diagnóstico VIDA é o próximo passo — identifica exatamente o que corrigir primeiro.';
+function pick(i){a[cur]=i;render()}
+function back(){if(cur>0){cur--;render()}}
+function next(){if(a[cur]===null)return;if(cur<Q.length-1){cur++;render()}else{quiz.classList.add('hidden');capture.classList.remove('hidden')}}
+function phone(v){const d=(v||'').replace(/\D/g,'');return d.length===10||d.length===11}
+function mail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((v||'').trim())}
+function calcScore(){return Math.round(a.reduce((s,x,i)=>s+Q[i].o[x][1],0)/Q.reduce((s,q)=>s+Math.max(...q.o.map(o=>o[1])),0)*100)}
+function analyze(){
+  const sc=calcScore(), sig=[]; let ti='',tx='',metrics='',dims=null;
+  if(CONFIG.mode==='ind'){
+    if(sc<=25){ti='Dependência elevada da renda ativa';tx='As respostas indicam que interrupções de renda e baixa autonomia patrimonial merecem investigação mais detalhada.'}
+    else if(sc<=50){ti='Construção inicial de autonomia';tx='Há elementos de estrutura, mas a independência ainda parece depender significativamente da continuidade do trabalho e da acumulação futura.'}
+    else if(sc<=75){ti='Acumulação em curso';tx='As respostas mostram uma base mais organizada, com pontos que ainda precisam ser quantificados para estimar prazo, sustentabilidade e margem de escolha.'}
+    else{ti='Autonomia financeira mais avançada';tx='As respostas indicam maior capacidade de sustentar escolhas com o patrimônio. A leitura não confirma independência financeira nem substitui projeções formais.'}
+    if(a[0]<=1)sig.push('A reserva declarada para uma interrupção de renda é relativamente curta.');
+    if(a[1]<=1)sig.push('A renda ainda depende majoritariamente do trabalho ativo.');
+    if(a[2]<=1)sig.push('O patrimônio-alvo ainda não está calculado ou documentado.');
+    if(a[3]<=1)sig.push('Cenários prolongados de redução de renda ainda não parecem formalmente testados.');
+    if(a[5]<=1)sig.push('O processo de acumulação ainda tem baixa formalização ou regularidade.');
+  }else if(CONFIG.mode==='adv'){
+    if(sc<=33){ti='Estrutura ainda pouco formalizada';tx='Suas respostas indicam vários temas que ainda dependem de memória, percepção ou validação futura.'}
+    else if(sc<=66){ti='Estrutura parcialmente formalizada';tx='Há elementos de organização, mas algumas áreas ainda parecem depender de revisão documental ou técnica.'}
+    else{ti='Estrutura mais formalizada — com pontos a revisar';tx='As respostas indicam maior organização. Isso não confirma proteção jurídica ou eficiência fiscal; apenas reduz a quantidade de lacunas autodeclaradas.'}
+    if(a[0]<2)sig.push('Separação entre patrimônio pessoal e atividade profissional merece confirmação técnica.');
+    if(a[1]<2)sig.push('A sustentação do padrão de vida durante interrupção profissional ainda não está plenamente quantificada.');
+    if(a[2]<2)sig.push('A interação entre situação financeira pessoal e participação societária merece revisão.');
+    if(a[3]<2)sig.push('Remuneração, distribuição e aspectos tributários parecem demandar revisão multidisciplinar.');
+    if(a[4]<2)sig.push('Eventos de saída, incapacidade ou falecimento de sócios podem precisar de maior formalização.');
+    if(a[5]<2)sig.push('A continuidade informacional para a família ainda pode depender excessivamente de você.');
+  }else{
+    const raw={dep:0,jur:0,fin:0},mx={dep:0,jur:0,fin:0};
+    Q.forEach((q,i)=>{raw[q.d]+=q.o[a[i]][1];mx[q.d]+=Math.max(...q.o.map(o=>o[1]))});
+    const s={dep:Math.round(raw.dep/mx.dep*100),jur:Math.round(raw.jur/mx.jur*100),fin:Math.round(raw.fin/mx.fin*100)};
+    if(sc<=40){ti='Estrutura ainda muito dependente do fundador';tx='As respostas sugerem concentração relevante de decisões, continuidade e informação em poucas pessoas.'}
+    else if(sc<=70){ti='Transição de dependência para estrutura';tx='Há mecanismos de continuidade, mas eles parecem parciais ou pouco testados em algumas dimensões.'}
+    else{ti='Estrutura mais distribuída — com necessidade de revisão';tx='As respostas indicam maior distribuição de processos e mecanismos de continuidade. Isso não confirma prontidão empresarial sem análise documental e financeira.'}
+    if(s.dep<60)sig.push('A operação ainda parece depender fortemente do fundador para decisões, acessos ou processos.');
+    if(s.jur<60)sig.push('Documentos e responsabilidades de continuidade societária merecem revisão formal.');
+    if(s.fin<60)sig.push('Caixa, concentração de receita ou proteção de pessoas-chave merecem quantificação mais detalhada.');
+    metrics=`<div class="result-grid"><div class="metric">Dependência do fundador<strong>${s.dep}%</strong></div><div class="metric">Continuidade societária<strong>${s.jur}%</strong></div><div class="metric">Continuidade financeira<strong>${s.fin}%</strong></div></div>`;dims=s;
   }
-
-  document.getElementById('resIndice').textContent = indice + '/100';
-  document.getElementById('resFrase').textContent = frase;
-  document.getElementById('ctaTitulo').textContent = ctaTitulo;
-  document.getElementById('resVulns').innerHTML = vulns.map(v => `<li>${v}</li>`).join('');
-  setTimeout(() => { document.getElementById('resBarraFill').style.width = indice + '%'; }, 200);
-
-  document.getElementById('questionsWrap').style.display = 'none';
-  document.getElementById('progressWrap').style.display = 'none';
-  const res = document.getElementById('resultado');
-  res.classList.add('visivel');
-  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  enviarLead(frase, indice);
+  if(!sig.length)sig.push('Nenhuma lacuna evidente nas respostas; premissas, documentos e valores ainda devem ser revistos periodicamente.');
+  return {sc,ti,tx,sig,metrics,dims};
 }
-
-const WEBHOOK = "https://script.google.com/macros/s/AKfycbzsVpO_OoWVjENJyDP2MCY-wGNqSnuz1oc6txaATRksQNRJCwrOaJaKlGzv2bQQI0I/exec";
-window._leadAdv = {};
-
-function enviarLead(frase, indice) {
-  const d = window._leadAdv;
-  if (!d.whatsapp) return;
-  fetch(WEBHOOK, {
-    method: 'POST', mode: 'no-cors',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      aba: 'Scanner Advogados',
-      nome: d.nome || '',
-      whatsapp: d.whatsapp,
-      indice,
-      frase,
-      data: new Date().toLocaleString('pt-BR', {timeZone:'America/Sao_Paulo'}),consentimento_dados:document.getElementById('lgpd-consent-dados').checked,consentimento_marketing:(document.getElementById('lgpd-consent-marketing')||{}).checked||false,versao_politica_privacidade:'2026-07-14'
-    })
-  }).catch(()=>{});
+function showResult(){
+  const n=nome.value.trim(),w=wpp.value,e=email.value.trim();
+  if(n.length<2||!phone(w)||!cd.checked||(CONFIG.emailRequired&&!mail(e))){err.classList.remove('hidden');return}
+  const r=analyze();title.textContent=r.ti;score.textContent=r.sc;text.textContent=r.tx;metrics.innerHTML=r.metrics;signals.innerHTML=r.sig.map(x=>`<li>${x}</li>`).join('');
+  cta.href=`https://wa.me/${WPP}?text=${encodeURIComponent(`Olá Ivan. Fiz ${CONFIG.publicName} e minha leitura inicial foi ${r.sc}/100 — ${r.ti}. Gostaria de entender o resultado.`)}`;
+  capture.classList.add('hidden');result.classList.remove('hidden');
+  try{
+    // Captura canônica v0.3: POST isolado interceptado pelo Motor VIDA antes do fluxo genérico.
+    // O payload não expõe dados pessoais na URL e não chama distribuir(), Brevo ou nutrição.
+    const respostasPontos=Q.map((q,i)=>q.o[a[i]][1]);
+    const common={
+      instrumento:CONFIG.publicName,
+      nome:n,
+      whatsapp:w.replace(/\D/g,''),
+      email:e,
+      score:String(r.sc),
+      faixa:r.ti,
+      respostas_json:JSON.stringify(respostasPontos),
+      consentimento_dados:'sim',
+      consentimento_marketing:cm.checked?'sim':'nao',
+      consent_term_version:'2026-09-14-v1',
+      versao:'candidato-v0.3',
+      origem:'scanner-web'
+    };
+    let sheet, extra={};
+    if(CONFIG.mode==='ind'){
+      sheet='Scanner_IF_VIDA';
+    }else if(CONFIG.mode==='emp'){
+      sheet='Scanner_Empresa_VIDA';
+      const d=r.dims||{dep:0,jur:0,fin:0};
+      extra={faturamento:document.getElementById('fat').value||'',dependencia_fundador:String(d.dep),continuidade_societaria:String(d.jur),continuidade_financeira:String(d.fin)};
+    }else{
+      sheet='Scanner_Advogados_VIDA';
+      const pts=respostasPontos;
+      extra={
+        patrimonio_pessoal:String(Math.round(((pts[0]+pts[1])/4)*100)),
+        escritorio:String(Math.round(((pts[2]+pts[3])/4)*100)),
+        socios:String(Math.round((pts[4]/2)*100)),
+        familia:String(Math.round((pts[5]/2)*100))
+      };
+    }
+    enviarCapturaCanonicaVIDA(sheet,Object.assign({},common,extra));
+  }catch(_){}
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.question-block').forEach((b,i) => {
-    setTimeout(() => b.classList.add('visible'), 100*i + 80);
-  });
-});
-</script>
-</body>
-</html>
+render();
+</script></body></html>
